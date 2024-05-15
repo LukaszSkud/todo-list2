@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    {% load static %}
+    <link rel="stylesheet" href="{%   static 'sing-up.css' %}">
+
+</head>
+<body>
+    <div class="main">
+        <form class="login-form" method='POST' >
+            {% csrf_token %}
+           
+            <h2>Sing up</h2>
+            <div class="srodek">
+                <label for="username">Email:</label>
+              {{form.email}}
+            </div>
+            <div class="srodek">
+                <label for="username">Username:</label>
+                {{form.username }}
+            </div>
+            <div class="srodek">
+                <label for="password">Password:</label>
+                {{form.password }}
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>

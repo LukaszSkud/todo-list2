@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/main.css">
+</head>
+
+<body>
+    
+    <nav class="main-nav">
+        <ul class="menu">
+            <li class="menu__item to-left">
+                <a class="menu__link" href="#">MENU</a>
+            </li>
+            <li class="menu__item">
+                <a class="menu__link" href="#">Item 2</a>
+            </li>
+            <li class="menu__item">
+                <a class="menu__link" href="#">Item 3</a>
+            </li>
+            {% if request.user.is_authenticated %}
+          x   <li class="menu__item">
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Wyloguj się</button>
+                </form>
+            </li>
+            {% else %}
+            <li class="menu__item">
+                <a class="menu__link" href="{% url 'login' %}">Zaloguj się</a>
+            </li>
+            <li class="menu__item">
+                <a class="menu__link" href="{% url 'singup' %}">Zarejestruj się</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    <div id="main-div">
+    </div>
+</body>
+
+</html>

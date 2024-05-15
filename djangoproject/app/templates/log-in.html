@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'log-in.css' %}">
+</head>
+<body>
+    <div class="main">
+        <form class="login-form" method="POST">
+            {% csrf_token %}
+            <h2>Login</h2>
+            {% for error in form.non_field_errors %}
+                <div class="error-message">{{ error }}</div>
+            {% endfor %}
+            <div class="srodek">
+                <label for="id_username">User name:</label>  
+                {{ form.username }}  
+            </div>
+            <div class="srodek">
+                <label for="id_password">Hasło:</label>  
+                {{ form.password }}
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>
