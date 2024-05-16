@@ -2,9 +2,11 @@ from django.shortcuts import render,HttpResponse,redirect
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate
-from .forms import SignUpForm,ExtendedAuthenticationForm
+from .forms import SignUpForm,ExtendedAuthenticationForm 
 from django.contrib import messages
-
+from django import forms
+from .models import UserTask
+from django.contrib.auth.decorators import login_required
 
 def mainpage(request):
     return render(request,'main-page.html')
@@ -41,9 +43,29 @@ def login_page(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, "Zalogowano pomyślnie")
-                return redirect('/')
+                return redirect('user_task_management')
             else:
                 form.add_error(None, 'Nieprawidłowy adres email lub hasło.')
     else:
         form = ExtendedAuthenticationForm()
     return render(request, 'log-in.html', {'form': form})
+
+class UserTaskForm(forms.ModelForm):
+    class Meta:
+        model = UserTask
+        fields = ['TaskName', 'TaskDescription', 'TaskTag']
+        
+def user_task_management(request):
+    if request.method == 'POST':
+        form = UserTaskForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.User = request.user
+            task.save()
+            return redirect('user_task_management')
+    else:
+        form = UserTaskForm()
+
+  
+    user_tasks = UserTask.objects.filter(User=request.user)
+    return render(request, 'todo-list.html', {'form': form, 'user_tasks': user_tasks})

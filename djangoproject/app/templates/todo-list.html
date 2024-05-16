@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>todo-list</title>
+</head>
+<body>
+    <h1>Add User Task</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="id_TaskName">Task Name:</label>
+        {{ form.TaskName }}
+        <td>
+        <label for="id_TaskDescription">Task Description:</label>
+        {{ form.TaskDescription }}
+        <td>
+        <label for="id_TaskTag">Task Tag:</label>
+        {{ form.TaskTag }}
+        <td>
+        <button type="submit">Submit</button>
+    </form>
+
+    <h1>User Tasks</h1>
+    <h2>Filter: </h2>
+    <table border='1'>
+        <tr>
+            <td>Task Name:</td>
+            <td>Task Description:</td>
+            <td>Task Tag: </td>
+            <td>Task Create Time: </td>
+            <td>Task Create Time: </td>
+        </tr>
+        {% for task in user_tasks %}
+           
+                
+                    <tr>
+                <td>{{ task.TaskName }}</td>
+                <td>{{ task.TaskDescription }}</td>
+                <td>{{ task.TaskTag }}</td>
+                 <td>{{ task.TaskCreateTime }}</td>
+                    </tr>
+               
+        {% empty %}
+            <li>No tasks found.</li>
+        {% endfor %}
+    </table>
+    </ul>
+</body>
+</html>

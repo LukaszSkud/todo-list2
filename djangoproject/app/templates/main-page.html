@@ -14,14 +14,8 @@
             <li class="menu__item to-left">
                 <a class="menu__link" href="#">MENU</a>
             </li>
-            <li class="menu__item">
-                <a class="menu__link" href="#">Item 2</a>
-            </li>
-            <li class="menu__item">
-                <a class="menu__link" href="#">Item 3</a>
-            </li>
             {% if request.user.is_authenticated %}
-          x   <li class="menu__item">
+             <li class="menu__item">
                 <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
                     <button type="submit">Wyloguj się</button>
