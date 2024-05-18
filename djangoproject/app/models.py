@@ -9,7 +9,7 @@ class UserTask(models.Model):
     TaskDescription = models.CharField(max_length=500)
     TaskTag = models.CharField(max_length=50, default="None")
     TaskCreateTime = models.DateTimeField(auto_now_add=True)
-    
-    
+    completed = models.BooleanField(default=False)
+    completed_time = models.DateTimeField(null=True, blank=True)
 
     
