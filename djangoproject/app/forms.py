@@ -15,4 +15,9 @@ class ExtendedAuthenticationForm(AuthenticationForm):
 class UserTaskForm(forms.ModelForm):
     class Meta:
         model = UserTask
-        fields = ['TaskName', 'TaskDescription']
+        fields = ['TaskName', 'TaskDescription','TaskTag']
+        widgets = {
+            'TaskName': forms.TextInput(attrs={'placeholder': 'Enter task name'}),
+            'TaskDescription': forms.TextInput(attrs={'placeholder': 'Enter task description'}),
+            'TaskTag': forms.TextInput(attrs={'placeholder': 'Enter task tag'}),
+        }

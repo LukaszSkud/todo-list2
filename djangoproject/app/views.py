@@ -54,23 +54,25 @@ def user_task_management(request):
             task = get_object_or_404(UserTask, id=task_id, User=request.user)
             task.delete()
             return redirect('user_task_management')
-        elif 'completed_task_id' in request.POST: 
+        elif 'completed_task_id' in request.POST:
             task_id = request.POST.get('completed_task_id')
             task = get_object_or_404(UserTask, id=task_id, User=request.user)
             task.completed = not task.completed
             if task.completed:
                 task.completed_time = timezone.now()
+                task.completed_note = request.POST.get('CompletedTaskNote', '') # Dodajemy notatkę do wykonanego zadania
             else:
                 task.completed_time = None
+                task.completed_note = None
             task.save()
             return redirect('user_task_management')
         elif 'edit_task' in request.POST:
             task_id = request.POST.get('edit_task')
             task = get_object_or_404(UserTask, id=task_id, User=request.user)
             form = UserTaskForm(request.POST, instance=task)
-            
-            form.save()
-            return redirect('user_task_management')
+            if form.is_valid():
+                form.save()
+                return redirect('user_task_management')
         else:
             form = UserTaskForm(request.POST)
             if form.is_valid():

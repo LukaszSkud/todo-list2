@@ -1,37 +1,32 @@
+<!-- todo-list.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>todo-list</title>
-    <style>
-       .completed {
-            background-color: lightgreen;
-        }
-    </style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'todo-list.css' %}">
 </head>
 <body>
-    <h1>Add User Task</h1>
+    <h1>Add Task</h1>
     <form method="POST">
         {% csrf_token %}
-        <label for="id_TaskName">Task Name:</label>
-        {{ form.TaskName }}
-        <label for="id_TaskDescription">Task Description:</label>
-        {{ form.TaskDescription }}
-        <label for="id_TaskTag">Task Tag:</label>
-        {{ form.TaskTag }}
-        <button type="submit">Submit</button>
+        {{ form.TaskName }}</br>
+        {{ form.TaskDescription }}</br>
+        {{ form.TaskTag }}</br>
+        <button type="submit">Add</button>
     </form>
 
-    <h1>User Tasks</h1>
-    <h2>Filter:</h2>
-    <form method="GET" action="{% url 'user_task_management' %}">
-        <label for="filter_tag">Tag:</label>
-        <input type="text" id="filter_tag" name="filter_tag" value="{{ request.GET.filter_tag }}">
+    <h1>Your Tasks</h1>
+    
+    <form method="GET" action="{% url 'user_task_management' %}" class="filter">
+        <h2>Filter:</h2>
+        <input placeholder="Enter Task Tag" type="text" id="filter_tag" name="filter_tag" value="{{ request.GET.filter_tag }}">
         <button type="submit">Filter</button>
     </form>
 
-    <table border="1">
+    <table class="tasks">
         <tr>
             <td>Task Name:</td>
             <td>Task Description:</td>
@@ -40,40 +35,52 @@
             <td>Status:</td>
             <td>Actions:</td>
             <td>Completed:</td>
+            <td>Task Note</td>
         </tr>
         {% for task in user_tasks %}
-            <tr class="{% if task.completed %} completed {% endif %}">
+            <tr class="{% if task.completed %} completed {% endif %} {% if not task.completed %} notcompleted {% endif %}">
                 <td>{{ task.TaskName }}</td>
                 <td>{{ task.TaskDescription }}</td>
                 <td>{{ task.TaskTag }}</td>
                 <td>{{ task.TaskCreateTime }}</td>
                 <td>
-                    <form method="POST" action="{% url 'user_task_management' %}" style="display:inline;">
+                    <form method="POST" action="{% url 'user_task_management' %}" >
                         {% csrf_token %}
                         <input type="hidden" name="completed_task_id" value="{{ task.id }}">
-                        <input type="checkbox" name="task_completed" {% if task.completed %} checked {% endif %} onchange="this.form.submit()">
+                        <input type="checkbox" id="checkbox" name="task_completed" {% if task.completed %} checked {% endif %} onchange="this.form.submit()">
                     </form>
                 </td>
                 <td>
-                    <form method="POST" action="{% url 'user_task_management' %}" style="display:inline;">
-                        {% csrf_token %}
-                        <input type="hidden" name="delete_task" value="{{ task.id }}">
-                        <button type="submit">Delete</button>
-                    </form>
-                    <form method="POST" action="{% url 'user_task_management' %}" style="display:inline;">
+                   <div class="actions">
+                    <form method="POST" action="{% url 'user_task_management' %}" class="actions">
                         {% csrf_token %}
                         <input type="hidden" name="edit_task" value="{{ task.id }}">
                         <input type="text" name="TaskName" value="{{ task.TaskName }}" required>
                         <input type="text" name="TaskDescription" value="{{ task.TaskDescription }}" required>
+                        <input type="text" name="TaskTag" value="{{ task.TaskTag }}" required>
+                        <input type="text" name="CompletedTaskNote" placeholder="Add note for completed task" style="display: {% if task.completed %} block; {% else %} none; {% endif %}">
                         <button type="submit">Edit</button>
+                        
                     </form>
+                    <form method="POST" action="{% url 'user_task_management' %}" class="actions">
+                        {% csrf_token %}
+                        <input type="hidden" name="delete_task" value="{{ task.id }}">
+                        <button type="submit">Delete Task</button>
+                    </form>
+                    
+                </div>
+               
                 </td>
+              
                 <td>
                     {% if task.completed %}
                         Yes, at {{ task.completed_time }}
                     {% else %}
                         No
                     {% endif %}
+                </td>
+                <td style="display: {% if task.completed %} block; {% else %} none; {% endif %}">
+                    qsaeqw
                 </td>
             </tr>
         {% empty %}

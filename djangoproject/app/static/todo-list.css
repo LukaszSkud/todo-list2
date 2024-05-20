@@ -1,0 +1,79 @@
+.completed {
+    background-color: lightgreen;
+}
+
+form input {
+    position: relative;
+    display: flex;
+    width: 40%;
+    border: 0.06rem solid #d2d2d2bf;
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    font-size: 1rem;
+  }
+  
+  input[type="text"]::placeholder {
+    color: black;
+  }
+  form button {
+    background-color: blue;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .actions {
+    display: flex;
+   flex-direction: row;
+ 
+}
+.actions button,input {
+  margin-top: 5px; 
+  margin-left: 5px; 
+}
+
+.filter{
+  margin-bottom: 45px;
+  display: flex;
+  flex-direction: row;
+}
+.tasks tr:first-child {
+  background-color: lightblue;
+  padding: 10px;
+  font-weight:900;
+  font-size: larger;
+}
+.tasks td{
+padding: 10px;
+}
+.notcompleted{
+  background-color: grey;
+}
+input[type="checkbox"] {
+  appearance: none;
+  border: 1px solid #ccc;
+  border-radius: 60%;
+  cursor: pointer;
+}
+
+
+input[type="checkbox"]:checked {
+  background-color: #2196F3;
+  border-color: #2196F3;
+}
+
+input[type="checkbox"]:checked::after {
+  content: "\2713"; 
+  display: block;
+  width: 80%;
+  height: 80%;
+  text-align: center;
+  line-height: 32px; 
+  color: #fff;
+  font-size: 34px; 
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
