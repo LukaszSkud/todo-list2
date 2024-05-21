@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Task</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'manage-task.css' %}">
+</head>
+<body>
+    <h1>Manage Task</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.TaskName }}<br>
+        {{ form.TaskDescription }}<br>
+        {{ form.TaskTag }}<br>
+        <button type="submit">Save</button>
+    </form>
+    <a href="{% url 'list_detail' task.TaskList.id %}">Back to list</a>
+</body>
+</html>

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from .models import UserTask
+from .models import UserTask,TaskList
 
 class SignUpForm(forms.Form):
     email = forms.EmailField(label="Email")
@@ -21,3 +21,8 @@ class UserTaskForm(forms.ModelForm):
             'TaskDescription': forms.TextInput(attrs={'placeholder': 'Enter task description'}),
             'TaskTag': forms.TextInput(attrs={'placeholder': 'Enter task tag'}),
         }
+        
+class TaskListForm(forms.ModelForm):
+    class Meta:
+        model = TaskList
+        fields = ['name']        

@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/main.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'main.css' %}">
 </head>
-
 <body>
-    
     <nav class="main-nav">
         <ul class="menu">
             <li class="menu__item to-left">
                 <a class="menu__link" href="#">MENU</a>
             </li>
             {% if request.user.is_authenticated %}
-             <li class="menu__item">
+            <li class="menu__item">
                 <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
                     <button type="submit">Wyloguj się</button>
@@ -32,7 +30,30 @@
         </ul>
     </nav>
     <div id="main-div">
+        <form id="add-list-form" action="{% url 'mainpage' %}" method="post">
+            {% csrf_token %}
+            <input placeholder="Wpisz nazwe listy" type="text" id="list-name" name="list_name">
+            <button type="submit">Dodaj listę</button>
+        </form>
+
+        <div id="list-section">
+            <h2>Twoje listy:</h2>
+            <ul>
+                {% if user_lists %}
+                    {% for list in user_lists %}
+                        <li>
+                            <a href="{% url 'list_detail' list.id %}">{{ list.name }}</a>
+                            <form action="{% url 'delete_list' list.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit">Usuń</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li>Brak list</li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
 </body>
-
 </html>
