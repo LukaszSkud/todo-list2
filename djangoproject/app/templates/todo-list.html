@@ -58,7 +58,7 @@
                             <input type="text" name="TaskName" value="{{ task.TaskName }}" required>
                             <input type="text" name="TaskDescription" value="{{ task.TaskDescription }}" required>
                             <input type="text" name="TaskTag" value="{{ task.TaskTag }}" required>
-                            <input type="text" name="CompletedTaskNote" placeholder="Add note for completed task" style="display: {% if task.completed %} block; {% else %} none; {% endif %}">
+                            <input type="text" name="completed_note" placeholder="Add note for completed task" value="{{ task.completed_note }}" style="display: {% if task.completed %} block; {% else %} none; {% endif %}">
                             <button type="submit">Edit</button>
                         </form>
                         <form method="POST" action="{% url 'manage_task' task.id %}" class="actions">
@@ -75,13 +75,18 @@
                         No
                     {% endif %}
                 </td>
-                <td style="display: {% if task.completed %} block; {% else %} none; {% endif %}">
-                    {{ task.completed_note }}
+                <td>
+                    {% if task.completed %}
+                        {{ task.completed_note }}
+                    {% else %}
+                        Task isn't completed
+                    {% endif %}
                 </td>
             </tr>
         {% empty %}
             <tr><td colspan="8">No tasks found.</td></tr>
         {% endfor %}
     </table>
+  <button onclick="window.location.href='{% url 'mainpage' %}'">back to main page</button>
 </body>
 </html>

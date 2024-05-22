@@ -23,6 +23,14 @@ form input {
     border-radius: 5px;
     cursor: pointer;
   }
+  button {
+    background-color: blue;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
   .actions {
     display: flex;
    flex-direction: row;

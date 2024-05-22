@@ -8,6 +8,7 @@ from django import forms
 from .models import UserTask, TaskList
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.core import serializers
 
 def mainpage(request):
     if request.method == 'POST':
@@ -48,6 +49,8 @@ def list_detail(request, list_id):
 
     return render(request, 'todo-list.html', {'form': form, 'user_tasks': user_tasks, 'task_list': task_list})
 
+
+
 def manage_task(request, task_id):
     task = get_object_or_404(UserTask, id=task_id, User=request.user)
     if request.method == 'POST':
@@ -58,7 +61,7 @@ def manage_task(request, task_id):
             task.completed = not task.completed
             if task.completed:
                 task.completed_time = timezone.now()
-                task.completed_note = request.POST.get('CompletedTaskNote', '') 
+                task.completed_note = request.POST.get('completed_note', '') 
             else:
                 task.completed_time = None
                 task.completed_note = None
@@ -74,14 +77,24 @@ def manage_task(request, task_id):
 
     return render(request, 'manage-task.html', {'form': form, 'task': task})
 
+
+
 def delete_list(request, list_id):
     task_list = get_object_or_404(TaskList, id=list_id, user=request.user)
     task_list.delete()
     return redirect('mainpage')
 
-def user_list(request):
-    users = User.objects.all()
-    return render(request, 'users-admin.html', {'users': users})
+def rename_list(request, list_id):
+    task_list = get_object_or_404(TaskList, id=list_id, user=request.user)
+    if request.method == 'POST':
+        form = TaskListForm(request.POST, instance=task_list)
+        if form.is_valid():
+            form.save()
+            return redirect('mainpage')
+    else:
+        form = TaskListForm(instance=task_list)
+    
+    return render(request, 'main-page.html', {'form': form, 'task_list': task_list})
 
 def signup(request):
     if request.method == 'POST':

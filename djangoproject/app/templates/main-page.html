@@ -16,28 +16,32 @@
             <li class="menu__item">
                 <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
-                    <button type="submit">Wyloguj się</button>
+                    <button type="submit">Log out</button>
                 </form>
             </li>
+           
             {% else %}
             <li class="menu__item">
-                <a class="menu__link" href="{% url 'login' %}">Zaloguj się</a>
+                <a class="menu__link" href="{% url 'login' %}">Log in</a>
             </li>
             <li class="menu__item">
-                <a class="menu__link" href="{% url 'singup' %}">Zarejestruj się</a>
+                <a class="menu__link" href="{% url 'singup' %}">Sign up</a>
             </li>
             {% endif %}
         </ul>
     </nav>
-    <div id="main-div">
+    <div id="main-div"> 
+        {% if  not request.user.is_authenticated %}
+        <h2 >Please log in to add a list</h2>
+        {% endif %}
         <form id="add-list-form" action="{% url 'mainpage' %}" method="post">
             {% csrf_token %}
-            <input placeholder="Wpisz nazwe listy" type="text" id="list-name" name="list_name">
-            <button type="submit">Dodaj listę</button>
+            <input placeholder="Enter list name" type="text" id="list-name" name="name" {% if not request.user.is_authenticated %} disabled {% endif %}>
+            <button type="submit" {% if not request.user.is_authenticated %} disabled {% endif %}>Add list</button>
         </form>
 
         <div id="list-section">
-            <h2>Twoje listy:</h2>
+            <h2>Your lists:</h2>
             <ul>
                 {% if user_lists %}
                     {% for list in user_lists %}
@@ -45,12 +49,19 @@
                             <a href="{% url 'list_detail' list.id %}">{{ list.name }}</a>
                             <form action="{% url 'delete_list' list.id %}" method="post">
                                 {% csrf_token %}
-                                <button type="submit">Usuń</button>
+                                <button type="submit">Delete</button>
+                            </form>
+                            <form action="{% url 'rename_list' list.id %}" method="post">
+                                {% csrf_token %}
+                                <div id='nwm'>
+                                    <input type="text" name="name" value="{{ list.name }}">
+                                    <button type="submit">Change name</button>
+                                </div>
                             </form>
                         </li>
                     {% endfor %}
                 {% else %}
-                    <li>Brak list</li>
+                    <li>No lists</li>
                 {% endif %}
             </ul>
         </div>

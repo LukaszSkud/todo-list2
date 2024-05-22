@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from .models import UserTask,TaskList
 
+
 class SignUpForm(forms.Form):
     email = forms.EmailField(label="Email")
     username = forms.CharField(label="Username")
@@ -15,7 +16,7 @@ class ExtendedAuthenticationForm(AuthenticationForm):
 class UserTaskForm(forms.ModelForm):
     class Meta:
         model = UserTask
-        fields = ['TaskName', 'TaskDescription','TaskTag']
+        fields = ['TaskName', 'TaskDescription', 'TaskTag', 'completed_note']
         widgets = {
             'TaskName': forms.TextInput(attrs={'placeholder': 'Enter task name'}),
             'TaskDescription': forms.TextInput(attrs={'placeholder': 'Enter task description'}),
