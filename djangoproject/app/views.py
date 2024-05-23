@@ -1,14 +1,12 @@
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from .forms import SignUpForm, ExtendedAuthenticationForm, UserTaskForm, TaskListForm    
-from django.contrib import messages
-from django import forms
 from .models import UserTask, TaskList
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from django.core import serializers
+import xml.etree.ElementTree as ET
+
 
 def mainpage(request):
     if request.method == 'POST':
@@ -171,3 +169,29 @@ def user_task_management(request):
         user_tasks = UserTask.objects.filter(User=request.user)
 
     return render(request, 'todo-list.html', {'form': form, 'user_tasks': user_tasks})
+
+
+
+def export_to_xml(request, list_id):
+    task_list = get_object_or_404(TaskList, id=list_id, user=request.user)
+    user_tasks = UserTask.objects.filter(User=request.user, TaskList=task_list)
+
+    x = ET.Element("Tasks")
+
+    for task in user_tasks:
+        taksElement = ET.SubElement(x, "Task")
+        ET.SubElement(taksElement, "TaskName").text = task.TaskName
+        ET.SubElement(taksElement, "TaskDescription").text = task.TaskDescription
+        ET.SubElement(taksElement, "TaskTag").text = task.TaskTag
+        ET.SubElement(taksElement, "TaskCreateTime").text = task.TaskCreateTime.isoformat()
+        ET.SubElement(taksElement, "Completed").text = str(task.completed)
+        if task.completed:
+            ET.SubElement(taksElement, "CompletedTime").text = task.completed_time.isoformat() if task.completed_time else ''
+            ET.SubElement(taksElement, "CompletedNote").text = task.completed_note if task.completed_note else ''
+
+    xml_data = ET.tostring(x, encoding="utf-8")
+
+    response = HttpResponse(xml_data, content_type="application/xml")
+    response['Content-Disposition'] = f'attachment; filename="tasks_{list_id}.xml"'
+
+    return response

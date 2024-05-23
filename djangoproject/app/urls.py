@@ -11,6 +11,7 @@ urlpatterns = [
     path('list/<int:list_id>/delete/', views.delete_list, name='delete_list'),
     path('user_task_management/', views.user_task_management, name='user_task_management'),
     path('list/<int:list_id>/rename/', views.rename_list, name='rename_list'),
+    path('export-tasks/<int:list_id>/', views.export_to_xml, name='export_to_xml'),
 
 
 ]

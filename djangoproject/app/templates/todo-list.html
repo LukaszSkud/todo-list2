@@ -87,6 +87,8 @@
             <tr><td colspan="8">No tasks found.</td></tr>
         {% endfor %}
     </table>
-  <button onclick="window.location.href='{% url 'mainpage' %}'">back to main page</button>
+
+    <button onclick="window.location.href='{% url 'mainpage' %}'">Back to main page</button>
+    <button onclick="window.location.href='{% url 'export_to_xml' task_list.id %}'">Export to XML</button>
 </body>
 </html>
