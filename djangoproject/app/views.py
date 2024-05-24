@@ -6,6 +6,7 @@ from .models import UserTask, TaskList
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 import xml.etree.ElementTree as ET
+from datetime import timedelta
 
 
 def mainpage(request):
@@ -44,6 +45,10 @@ def list_detail(request, list_id):
         user_tasks = UserTask.objects.filter(User=request.user, TaskList=task_list, TaskTag__icontains=filter_tag)
     else:
         user_tasks = UserTask.objects.filter(User=request.user, TaskList=task_list)
+        
+    now = timezone.now()
+    for task in user_tasks:
+        task.week = not task.completed and task.TaskCreateTime < now - timedelta(weeks=1)
 
     return render(request, 'todo-list.html', {'form': form, 'user_tasks': user_tasks, 'task_list': task_list})
 

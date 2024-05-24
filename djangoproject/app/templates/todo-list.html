@@ -38,7 +38,7 @@
             <th>Task Note</th>
         </tr>
         {% for task in user_tasks %}
-            <tr class="{% if task.completed %} completed {% endif %} {% if not task.completed %} notcompleted {% endif %}">
+            <tr class="{% if task.completed %} completed {% endif %} {% if not task.completed %} notcompleted {% endif %} {% if task.week %} red {% endif %}"> 
                 <td>{{ task.TaskName }}</td>
                 <td>{{ task.TaskDescription }}</td>
                 <td>{{ task.TaskTag }}</td>
